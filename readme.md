@@ -13,7 +13,20 @@ This project seeks to prototype a open sourced Zero Knowledge solution for ident
 - [zkLinkProtocol/groth16-sol-verifier](https://github.com/zkLinkProtocol/groth16-sol-verifier)
 
 ## Initial Brain Dump
-Generate the proof on A/B Chain, verify on B/A Chain, viola.
+> Generate the proof on A/B Chain, verify on B/A Chain, viola.
+Right? No. There does _not_ seem to be a way to generate proofs onchain. Only zk verification seems to be implemented onchain - at least for Ethereum and Solana.
+
+### Technique
+> We need to prove the underlying state transition (transaction signature) that supports a proof actually happened.
+Unfortunately Ethereum does _not_ have a way to do this without a proxied function in a (new) smart contract. If we suppose ERC-20 tokens, we can deploy a simple and minimal smart contract that _just_ calls `transfer()` and emits a _memo_.
+
+It would be an ill implementation to assume any proof generated is valid without a disparate verification entity. Especially if proof generation happens client-side (which may not be feasible).
+
+To satisfy efficacy of proof generation, the _memo_ of such state transition needs to be yielded from the chain. We need some sort of encryption/hashing function of _memo's_ to guarantee this clause.
+
+#### End-to-End Guarantee's
+We need to guarantee that across origin and destination chains, we have asserted the following 
+
 
 ### Proof Circuits
 #### Asset Ownership
